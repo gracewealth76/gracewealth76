@@ -1,0 +1,559 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Book an Appointment — Tress & Co</title>
+
+<!-- Fonts: elegant serif heading + readable serif body to match your template -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lora:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --page-bg: #f5f2ef;        /* soft background like your template */
+    --card-bg: #ffffff;
+    --muted: #9a8f87;
+    --text: #22211f;
+    --accent: #b99e82;        /* warm beige accent */
+    --line: #dcd3cc;
+    --max-width: 1100px;
+  }
+
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family: 'Lora', serif;
+    background: var(--page-bg);
+    color:var(--text);
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    line-height:1.5;
+  }
+
+  /* container used across page */
+  .container{
+    width: clamp(320px, 92%, var(--max-width));
+    margin: 0 auto;
+  }
+
+  /* Header / hero (small) to match your template top section */
+  .hero{
+    background-image: linear-gradient(rgba(11,9,8,0.35), rgba(11,9,8,0.15));
+    background-size: cover;
+    background-position: center;
+    padding: 72px 0 36px;
+    text-align: center;
+    color: #fff;
+  }
+  /* use a subtle image via CSS; replace with your hero image URL if desired */
+  .hero::before{
+    content:"";
+    position:absolute;
+    left:0;right:0;top:0;height:220px;z-index:-1;
+    background: url('https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=1400&q=60') center/cover no-repeat;
+    opacity:0.35;
+  }
+  .hero .container{
+    position:relative;
+    z-index:2;
+  }
+  .eyebrow{
+    font-size:12px;
+    letter-spacing:4px;
+    text-transform:uppercase;
+    color:rgba(255,255,255,0.9);
+    margin-bottom:22px;
+  }
+  h1{
+    font-family: 'Playfair Display', serif;
+    font-weight:700;
+    font-size:36px;
+    margin:0 0 10px;
+    color:#fff;
+    letter-spacing:1px;
+  }
+  .lead{
+    color: rgba(255,255,255,0.9);
+    margin: 8px 0 20px;
+  }
+  .cta-hero{
+    display:inline-block;
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.95);
+    color: #fff;
+    padding:10px 18px;
+    text-decoration:none;
+    border-radius:3px;
+    font-weight:600;
+    font-size:14px;
+  }
+
+  /* Booking section */
+  .booking-wrap{
+    margin: 36px auto 80px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .booking-card{
+    background: var(--card-bg);
+    border-top: 6px solid var(--line); /* subtle top line like template */
+    padding: 32px;
+    box-shadow: 0 6px 20px rgba(21,18,16,0.04);
+    border-radius: 4px;
+  }
+
+  /* section heading */
+  .section-head{
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  .section-head h2{
+    font-family: 'Playfair Display', serif;
+    font-size:22px;
+    margin:0 0 6px;
+    letter-spacing:1px;
+  }
+  .section-head h2::after{
+    content:"";
+    display:block;
+    width:70px;
+    height:1px;
+    background:var(--line);
+    margin:10px auto 0;
+  }
+  .section-sub{
+    color:var(--muted);
+    margin-top:12px;
+    font-size:15px;
+  }
+
+  /* Form layout */
+  form#bookingForm{
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .form-grid{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:16px;
+  }
+  .form-row{
+    display:flex;
+    gap:12px;
+  }
+  .field{
+    display:flex;
+    flex-direction:column;
+    margin-bottom:14px;
+  }
+  label{
+    font-size:13px;
+    color:var(--muted);
+    margin-bottom:8px;
+    font-weight:600;
+    letter-spacing:0.6px;
+  }
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="date"],
+  select,
+  textarea,
+  input[type="time"]{
+    font-family:inherit;
+    padding:12px 14px;
+    border-radius:3px;
+    border:1px solid var(--line);
+    background: #fff;
+    color:var(--text);
+    font-size:15px;
+    outline:none;
+    transition: box-shadow .15s ease, border-color .12s ease;
+  }
+  input:focus, select:focus, textarea:focus{
+    border-color:var(--accent);
+    box-shadow: 0 6px 18px rgba(185,158,130,0.08);
+  }
+  textarea{
+    min-height:110px;
+    resize:vertical;
+  }
+
+  /* small decorative divider under the small label (like HAIRCARE line) */
+  .service-select-wrapper label.small{
+    display:inline-block;
+    position:relative;
+    padding-bottom:8px;
+  }
+  .service-select-wrapper label.small::after{
+    content:"";
+    display:block;
+    height:1px;
+    width:56%;
+    background:var(--line);
+    margin-top:8px;
+  }
+
+  /* actions */
+  .actions{
+    display:flex;
+    gap:12px;
+    align-items:center;
+    margin-top:8px;
+  }
+  .btn {
+    display:inline-block;
+    padding:12px 18px;
+    border-radius:3px;
+    border: 1px solid var(--text);
+    background: var(--text);
+    color:#fff;
+    font-weight:600;
+    cursor:pointer;
+    font-size:15px;
+  }
+  .btn.secondary{
+    background:transparent;
+    color:var(--text);
+    border:1px solid var(--line);
+  }
+
+  /* confirmation box */
+  .confirmation{
+    max-width:900px;
+    margin:18px auto 0;
+    padding:18px 22px;
+    background:#f7f5f3;
+    border-left:4px solid var(--accent);
+    color:var(--text);
+    display:none;
+  }
+  .confirmation.show{ display:block; }
+
+  /* saved appointments list */
+  .appointments-list{
+    max-width: 900px;
+    margin: 22px auto 0;
+    display:grid;
+    gap:12px;
+  }
+  .appt-card{
+    background: #fff;
+    padding:12px 14px;
+    border:1px solid var(--line);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:12px;
+  }
+  .appt-left{
+    font-size:14px;
+    color:var(--text);
+  }
+  .appt-meta{
+    color:var(--muted);
+    font-size:13px;
+  }
+
+  /* responsive */
+  @media (max-width:880px){
+    .form-grid{ grid-template-columns: 1fr; }
+    .hero{ padding:64px 0 30px; }
+    h1{ font-size:30px; }
+  }
+
+  /* tiny polish */
+  .muted { color:var(--muted); font-size:14px; }
+  .small { font-size:13px; color:var(--muted); }
+</style>
+</head>
+
+<body>
+  <!-- HERO -->
+  <header class="hero">
+    <div class="container">
+      <p class="eyebrow">TRESS & CO</p>
+      <h1>Book an Appointment</h1>
+      <p class="lead">Choose a service, pick a date & time — we’ll confirm your slot shortly.</p>
+      <a href="#booking" class="cta-hero">Book an Appointment</a>
+    </div>
+  </header>
+
+  <main class="container" id="booking">
+    <section class="booking-wrap">
+
+      <div class="section-head">
+        <h2>Appointment Request</h2>
+        <div class="section-sub">This booking form works purely on the front-end (no backend). Appointments are stored locally for demo purposes.</div>
+      </div>
+
+      <div class="booking-card" role="region" aria-labelledby="booking-title">
+        <h3 id="booking-title" style="font-family:'Playfair Display', serif; margin:0 0 10px; font-size:20px;">Book your service</h3>
+        <p class="muted" style="margin-bottom:20px;">Select the service, preferred date and time. We will reach out to confirm your appointment.</p>
+
+        <form id="bookingForm" novalidate>
+          <div class="form-grid">
+            <div class="field">
+              <label for="fullName">Full name</label>
+              <input id="fullName" name="fullName" type="text" placeholder="Jane Doe" required>
+            </div>
+
+            <div class="field">
+              <label for="email">Email</label>
+              <input id="email" name="email" type="email" placeholder="hello@example.com" required>
+            </div>
+
+            <div class="field">
+              <label for="phone">Phone</label>
+              <input id="phone" name="phone" type="tel" placeholder="(123) 456-7890" required>
+            </div>
+
+            <div class="field service-select-wrapper">
+              <label class="small">Service</label>
+              <select id="service" required>
+                <option value="">— Select a service —</option>
+                <option>Haircut & Styling — #10,000– #20,000</option>
+                <option>Color & Highlights — from $70</option>
+                <option>Perm & Straightening — from $80</option>
+                <option>Hair Spa — from $60</option>
+                <option>Keratin Treatment — from $70</option>
+                <option>Deep Conditioning — from $90</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="date">Preferred date</label>
+              <input id="date" name="date" type="date" required>
+            </div>
+
+            <div class="field">
+              <label for="time">Preferred time</label>
+              <select id="time" name="time" required>
+                <option>Loading times...</option>
+              </select>
+            </div>
+
+            <div style="grid-column:1 / -1" class="field">
+              <label for="notes">Notes (optional)</label>
+              <textarea id="notes" name="notes" placeholder="Tell us anything we should know..."></textarea>
+            </div>
+          </div>
+
+          <div class="actions" style="margin-top:8px;">
+            <button class="btn" type="submit">Request Appointment</button>
+            <button class="btn secondary" type="button" id="clearAll">Clear Saved</button>
+          </div>
+        </form>
+
+        <div id="confirmation" class="confirmation" aria-live="polite" style="margin-top:18px;"></div>
+      </div>
+
+      <div id="savedAppointments" class="appointments-list" aria-live="polite" style="margin-top:6px;"></div>
+
+    </section>
+  </main>
+
+<script>
+/* ---------- Helper utilities ---------- */
+const $ = sel => document.querySelector(sel);
+const $$ = sel => document.querySelectorAll(sel);
+const todayISO = () => {
+  const d = new Date();
+  const m = String(d.getMonth()+1).padStart(2,'0');
+  const day = String(d.getDate()).padStart(2,'0');
+  return `${d.getFullYear()}-${m}-${day}`;
+};
+const pad = n => String(n).padStart(2,'0');
+const minutesToHHMM = mins => pad(Math.floor(mins/60)) + ':' + pad(mins%60);
+const hhmmToPretty = hhmm => {
+  const [h,m] = hhmm.split(':').map(Number);
+  const ampm = h>=12 ? 'PM' : 'AM';
+  const displayH = ((h + 11) % 12) + 1;
+  return `${displayH}:${pad(m)} ${ampm}`;
+};
+
+/* ---------- Elements ---------- */
+const dateInput = $('#date');
+const timeSelect = $('#time');
+const bookingForm = $('#bookingForm');
+const confirmation = $('#confirmation');
+const savedList = $('#savedAppointments');
+const clearAllBtn = $('#clearAll');
+
+/* ---------- Time slot generation ---------- */
+function populateTimeOptions(selectedDate){
+  // business hours (change if you like)
+  const startMin = 9 * 60;   // 09:00
+  const endMin   = 17 * 60;  // 17:00
+  const step = 30;           // minutes
+  const now = new Date();
+  const today = todayISO();
+  const isToday = (selectedDate === today);
+  const buffer = 60; // minutes buffer to prevent booking immediate slots (optional)
+
+  timeSelect.innerHTML = '';
+  const fragment = document.createDocumentFragment();
+
+  for(let t = startMin; t <= endMin; t += step){
+    // if booking for today, filter out times earlier than now + buffer
+    if(isToday){
+      const nowMin = now.getHours()*60 + now.getMinutes();
+      if(t <= nowMin + buffer) continue;
+    }
+    const val = minutesToHHMM(t);
+    const opt = document.createElement('option');
+    opt.value = val;
+    opt.textContent = hhmmToPretty(val);
+    fragment.appendChild(opt);
+  }
+
+  // if no times available, show message entry
+  if(!fragment.children.length){
+    const none = document.createElement('option');
+    none.value = '';
+    none.textContent = 'No available times — try another date';
+    none.disabled = true;
+    timeSelect.appendChild(none);
+  } else {
+    timeSelect.appendChild(fragment);
+  }
+}
+
+/* ---------- Init on load ---------- */
+function init(){
+  // set min date to today
+  dateInput.min = todayISO();
+
+  // default date is today to help users; remove if you prefer blank
+  dateInput.value = todayISO();
+
+  // populate times for today (will filter past times)
+  populateTimeOptions(dateInput.value);
+
+  renderSavedAppointments();
+}
+
+dateInput.addEventListener('input', () => {
+  // when user chooses a different date, regenerate times
+  populateTimeOptions(dateInput.value);
+});
+
+/* ---------- Storage helpers ---------- */
+function loadAppointments(){
+  try {
+    const raw = localStorage.getItem('appointments_demo_v1');
+    return raw ? JSON.parse(raw) : [];
+  } catch(e){
+    return [];
+  }
+}
+function saveAppointments(list){
+  localStorage.setItem('appointments_demo_v1', JSON.stringify(list));
+}
+
+/* ---------- Render saved appts ---------- */
+function renderSavedAppointments(){
+  const items = loadAppointments();
+  savedList.innerHTML = '';
+  if(items.length === 0){
+    savedList.innerHTML = '<div class="small muted" style="text-align:center; margin-top:10px">No saved appointments yet (local demo).</div>';
+    return;
+  }
+
+  items.slice().reverse().forEach((apt, idx) => {
+    const card = document.createElement('div');
+    card.className = 'appt-card';
+    const left = document.createElement('div');
+    left.className = 'appt-left';
+    left.innerHTML = `<strong>${apt.fullName}</strong> — ${apt.service}`;
+    const right = document.createElement('div');
+    right.className = 'appt-meta';
+    right.innerHTML = `${apt.date} • ${apt.time} <br><span style="color:var(--muted); font-size:12px">Saved: ${new Date(apt.savedAt).toLocaleString()}</span>`;
+    const wrapper = document.createElement('div');
+    const del = document.createElement('button');
+    del.className = 'btn secondary';
+    del.textContent = 'Delete';
+    del.addEventListener('click', () => {
+      const all = loadAppointments();
+      all.splice(items.length - 1 - idx, 1);
+      saveAppointments(all);
+      renderSavedAppointments();
+    });
+
+    card.appendChild(left);
+    card.appendChild(right);
+    card.appendChild(del);
+    savedList.appendChild(card);
+  });
+}
+
+/* ---------- Form submit ---------- */
+bookingForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  confirmation.classList.remove('show');
+  // basic validation
+  const fullName = $('#fullName').value.trim();
+  const email = $('#email').value.trim();
+  const phone = $('#phone').value.trim();
+  const service = $('#service').value;
+  const date = $('#date').value;
+  const time = $('#time').value;
+  const notes = $('#notes').value.trim();
+
+  if(!fullName || !email || !phone || !service || !date || !time){
+    confirmation.style.display = 'block';
+    confirmation.classList.add('show');
+    confirmation.innerHTML = `<strong style="display:block; color:#a42b2b">Please fill all required fields.</strong>`;
+    return;
+  }
+
+  // date sanity: we already set min, but double-check
+  if(date < todayISO()){
+    confirmation.style.display = 'block';
+    confirmation.classList.add('show');
+    confirmation.innerHTML = `<strong style="display:block; color:#a42b2b">Please choose a valid date.</strong>`;
+    return;
+  }
+
+  const appointment = {
+    fullName, email, phone, service, date, time: hhmmToPretty(time), notes,
+    savedAt: Date.now()
+  };
+
+  const list = loadAppointments();
+  list.push(appointment);
+  saveAppointments(list);
+
+  // show confirmation summary
+  confirmation.style.display = 'block';
+  confirmation.classList.add('show');
+  confirmation.innerHTML = `
+    <strong>Thanks ${fullName.split(' ')[0]} — your request is saved.</strong>
+    <div class="small" style="margin-top:8px">Requested: <strong>${service}</strong> on <strong>${date}</strong> at <strong>${appointment.time}</strong>.</div>
+    <div class="small muted" style="margin-top:6px">This demo stores the request locally. In production, you'd send this to a server or booking service.</div>
+  `;
+
+  // reset form to defaults
+  bookingForm.reset();
+  dateInput.value = todayISO();
+  populateTimeOptions(dateInput.value);
+  renderSavedAppointments();
+});
+
+/* ---------- Clear saved demo data ---------- */
+clearAllBtn.addEventListener('click', () => {
+  if(!confirm('Clear all saved demo appointments from this browser?')) return;
+  localStorage.removeItem('appointments_demo_v1');
+  renderSavedAppointments();
+  confirmation.style.display = 'block';
+  confirmation.classList.add('show');
+  confirmation.innerHTML = `<span class="small">Cleared saved appointments.</span>`;
+});
+
+/* ---------- Start ---------- */
+init();
+</script>
+</body>
+</html>
